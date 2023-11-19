@@ -11,4 +11,16 @@ output:
 
 ## Project thoughts
 
-I want to do a project exploring environmental policy and the policy preferences of people across the US.
+I want to do a project exploring immigration in the US and certain trends that have been witnessed over the past few years. I will be using a data set that include Refugee Arrivals, Immigrants obtaining lawful permanent status and also deportation statistics.  
+
+```{r}
+library(tidyverse)
+
+
+us_immg <- read_csv("US_Immg.csv")
+
+us_immg |>
+  ggplot(aes(x = Year, y = `Refugee Arrivals`))+
+  geom_line()
+```
+
