@@ -13,14 +13,32 @@ output:
 
 I want to do a project exploring immigration in the US and certain trends that have been witnessed over the past few years. I will be using a data set that include Refugee Arrivals, Immigrants obtaining lawful permanent status and also deportation statistics.  
 
+### Milestone 4 Analysis 
+Below I included a few additional plots, each of which include an additional level of analysis I want to explore in my project. One specific trend I wanted to look into was how politics might impact the trends that are indicated below, but I am still finding a data set that I might be able to merge to the one below. In the mean time some of the trends I have noticed are that it seems like, over the past decades, years where there has been a Republican Presidency in the US have resulted in less a decreasing rate of refugees into the US along with and increasing number of US immigrants obtaining lawful permanent status, whereas it has been the opposite or remained constant in years where there have been democratic presidents. Other than that I have noticed that in all of the immigration metrics measured that in 2020 there was a significant drop in immigration which is to be expected due to the pandemic. 
+
 ```{r}
 library(tidyverse)
 
 
 us_immg <- read_csv("US_Immg.csv")
 
-us_immg |>
+refugee_arr <- us_immg |>
   ggplot(aes(x = Year, y = `Refugee Arrivals`))+
+  geom_line()
+refugee_arr
+
+noncit_apprehend <- us_immg |>
+  ggplot(aes(x = Year, y = `Noncitizen Apprehensions`)) +
+  geom_line()
+noncit_apprehend
+
+lawful_stat <- us_immg |>
+  ggplot(aes(x = Year, y = `Immigrants Obtaining Lawful Permanent Resident Status`)) +
+  geom_line()
+lawful_stat
+
+us_immg |>
+  ggplot(aes(x = Year, y = `Noncitizen Removals`)) +
   geom_line()
 ```
 
