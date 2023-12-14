@@ -115,7 +115,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <!--/radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-resource-manifest">
-  {"type":"character","attributes":{},"value":["index_files/anchor-4.2.2/anchor.min.js","index_files/bowser-1.9.3/bowser.min.js","index_files/distill-2.2.21/template.v2.js","index_files/figure-html5/unnamed-chunk-1-1.png","index_files/figure-html5/unnamed-chunk-1-2.png","index_files/figure-html5/unnamed-chunk-1-3.png","index_files/figure-html5/unnamed-chunk-1-4.png","index_files/header-attrs-2.17/header-attrs.js","index_files/header-attrs-2.25/header-attrs.js","index_files/jquery-3.6.0/jquery-3.6.0.js","index_files/jquery-3.6.0/jquery-3.6.0.min.js","index_files/jquery-3.6.0/jquery-3.6.0.min.map","index_files/popper-2.6.0/popper.min.js","index_files/tippy-6.2.7/tippy-bundle.umd.min.js","index_files/tippy-6.2.7/tippy-light-border.css","index_files/tippy-6.2.7/tippy.css","index_files/tippy-6.2.7/tippy.umd.min.js","index_files/webcomponents-2.0.0/webcomponents.js","US_Immg.csv"]}
+  {"type":"character","attributes":{},"value":["cumulative_2006-2022.dta","cumulative_ces_policy_preferences.dta","index_files/anchor-4.2.2/anchor.min.js","index_files/bowser-1.9.3/bowser.min.js","index_files/distill-2.2.21/template.v2.js","index_files/figure-html5/unnamed-chunk-1-1.png","index_files/figure-html5/unnamed-chunk-1-2.png","index_files/figure-html5/unnamed-chunk-1-3.png","index_files/figure-html5/unnamed-chunk-1-4.png","index_files/figure-html5/unnamed-chunk-3-1.png","index_files/figure-html5/unnamed-chunk-4-1.png","index_files/header-attrs-2.17/header-attrs.js","index_files/header-attrs-2.25/header-attrs.js","index_files/jquery-3.6.0/jquery-3.6.0.js","index_files/jquery-3.6.0/jquery-3.6.0.min.js","index_files/jquery-3.6.0/jquery-3.6.0.min.map","index_files/kePrint-0.0.1/kePrint.js","index_files/lightable-0.0.1/lightable.css","index_files/popper-2.6.0/popper.min.js","index_files/tippy-6.2.7/tippy-bundle.umd.min.js","index_files/tippy-6.2.7/tippy-light-border.css","index_files/tippy-6.2.7/tippy.css","index_files/tippy-6.2.7/tippy.umd.min.js","index_files/webcomponents-2.0.0/webcomponents.js"]}
   </script>
   <!--radix_placeholder_navigation_in_header-->
   <!--/radix_placeholder_navigation_in_header-->
@@ -1473,6 +1473,8 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 
   <!--/radix_placeholder_distill-->
   <script src="index_files/header-attrs-2.25/header-attrs.js"></script>
+  <script src="index_files/kePrint-0.0.1/kePrint.js"></script>
+  <link href="index_files/lightable-0.0.1/lightable.css" rel="stylesheet" />
   <script src="index_files/jquery-3.6.0/jquery-3.6.0.min.js"></script>
   <script src="index_files/popper-2.6.0/popper.min.js"></script>
   <link href="index_files/tippy-6.2.7/tippy.css" rel="stylesheet" />
@@ -1517,44 +1519,108 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </div>
 
 <div class="d-article">
-<h2 id="project-thoughts">Project thoughts</h2>
-<p>I want to do a project exploring immigration in the US and certain trends that have been witnessed over the past few years. I will be using a data set that include Refugee Arrivals, Immigrants obtaining lawful permanent status and also deportation statistics.</p>
-<h3 id="milestone-4-analysis">Milestone 4 Analysis</h3>
-<p>Below I included a few additional plots, each of which include an additional level of analysis I want to explore in my project. One specific trend I wanted to look into was how politics might impact the trends that are indicated below, but I am still finding a data set that I might be able to merge to the one below. In the mean time some of the trends I have noticed are that it seems like, over the past decades, years where there has been a Republican Presidency in the US have resulted in less a decreasing rate of refugees into the US along with and increasing number of US immigrants obtaining lawful permanent status, whereas it has been the opposite or remained constant in years where there have been democratic presidents. Other than that I have noticed that in all of the immigration metrics measured that in 2020 there was a significant drop in immigration which is to be expected due to the pandemic.</p>
 <div class="layout-chunk" data-layout="l-body">
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='op'>)</span></span>
-<span></span>
-<span></span>
-<span><span class='va'>us_immg</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://readr.tidyverse.org/reference/read_delim.html'>read_csv</a></span><span class='op'>(</span><span class='st'>"US_Immg.csv"</span><span class='op'>)</span></span>
-<span></span>
-<span><span class='va'>refugee_arr</span> <span class='op'>&lt;-</span> <span class='va'>us_immg</span> <span class='op'>|&gt;</span></span>
-<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>Year</span>, y <span class='op'>=</span> <span class='va'>`Refugee Arrivals`</span><span class='op'>)</span><span class='op'>)</span><span class='op'>+</span></span>
-<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_path.html'>geom_line</a></span><span class='op'>(</span><span class='op'>)</span></span>
-<span><span class='va'>refugee_arr</span></span></code></pre>
+
 </div>
-<img src="index_files/figure-html5/unnamed-chunk-1-1.png" width="624" />
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>noncit_apprehend</span> <span class='op'>&lt;-</span> <span class='va'>us_immg</span> <span class='op'>|&gt;</span></span>
-<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>Year</span>, y <span class='op'>=</span> <span class='va'>`Noncitizen Apprehensions`</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span></span>
-<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_path.html'>geom_line</a></span><span class='op'>(</span><span class='op'>)</span></span>
-<span><span class='va'>noncit_apprehend</span></span></code></pre>
+<div class="layout-chunk" data-layout="l-body">
+
 </div>
-<img src="index_files/figure-html5/unnamed-chunk-1-2.png" width="624" />
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>lawful_stat</span> <span class='op'>&lt;-</span> <span class='va'>us_immg</span> <span class='op'>|&gt;</span></span>
-<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>Year</span>, y <span class='op'>=</span> <span class='va'>`Immigrants Obtaining Lawful Permanent Resident Status`</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span></span>
-<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_path.html'>geom_line</a></span><span class='op'>(</span><span class='op'>)</span></span>
-<span><span class='va'>lawful_stat</span></span></code></pre>
+<h1 id="introduction-and-research-question">Introduction and Research Question</h1>
+<p>The question I am researching is:
+What is the influence of an individuals’ political views on their support or opposition of undocumented immigrants receiving legal status in the United States?</p>
+<p>This research will investigate the correlation between the political views that an individual holds and their support of undocumented immigrants receiving legal status. I will be examining data from counties across the entire United States to understand the full length to which political leanings may affect views on immigrant policy. My hypothesis is that individuals who lean more liberal will have more favorable views on supporting the legal status of undocumented immigrants. This is mostly based on the fact that liberals tend to have more favorable views of immigrants generally in the United States.</p>
+<p>This question is important to investigate because debates about immigrant policy and treatment of undocumented immigrants are often some of the most contentious in US politics. They provide important positions that candidates take during US political elections and overall policy making. Specifically, the way in which undocumented immigrants are supported or not supported has brought some of the most important discussion during elections in past years. Thus, I found it important to analyze the impact that one’s political views have on their support of undocumented immigrants to understand potential influences people may have in future immigrant policy making.</p>
+<p>#Data and Methods</p>
+<p>##Data Sources
+Cumulative CES Policy Preferences: This data set compiles responses to questions related to immigration policies along with other policies in the US, focusing on the question of whether undocumented immigrants should be granted legal status.</p>
+<p>Cumulative CCES Common Content: In addition to immigration policy preferences, this dataset includes variables related to race demographics, ideological viewpoints, gender, employment status, and other factors.</p>
+<p>I will be combining these 2 datasets for my analysis.</p>
+<p>##Research Design
+The study adopts an observational approach with correlational analysis, avoiding assumptions about causal relationships. The research design aims to identify associations between various variables and preferences regarding the legal status of undocumented immigrants.</p>
+<h2 id="outcome-variables">Outcome Variables</h2>
+<p>Legal Status for Undocumented Immigrants -</p>
+<p>The survey question asks respondents, “What do you think the U.S. government should do about immigration? Select all that apply. <em>Grant legal status to all illegal immigrants who have held jobs and paid taxes for at least 3 years, and not been convicted of any felony crimes</em>.” The variable “immig_legalize” is introduced to analyze the proportion of respondents supportive of granting legal status to undocumented immigrants.</p>
+<div class="layout-chunk" data-layout="l-body">
+<p><img src="index_files/figure-html5/unnamed-chunk-3-1.png" width="624" style="display: block; margin: auto;" /></p>
 </div>
-<img src="index_files/figure-html5/unnamed-chunk-1-3.png" width="624" />
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>us_immg</span> <span class='op'>|&gt;</span></span>
-<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>Year</span>, y <span class='op'>=</span> <span class='va'>`Noncitizen Removals`</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span></span>
-<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_path.html'>geom_line</a></span><span class='op'>(</span><span class='op'>)</span></span></code></pre>
+<h1 id="results">Results</h1>
+<p>Taking a look at the plot we created, we can see that there is a positive correlation between the proportion of liberal people in a county and the levels of support in the legal status of immigrants. We see that as the proportion of liberals in a county increases, the levels of support also increase. This supports my hypothesis as I expected liberal people to exhibit higher levels of support towards undocumented immigrants. Looking at the graph, it is interesting to note that there appears to be a larger set of data points of counties with lower levels of liberals. This indicates that this data set appears to have more counties that lean Republican.</p>
+<p>Looking at the regression, I chose to conduct a bivariate regression. This means that my regression looked at two variables, those being political ideology of individuals, and if they support or do not support undocumented immigrants receiving legal status. The bivariate model indicates that for an increase of 1 unit of Liberal there would be a 0.36 increase in support for immigrants receiving documentation. The interpretation of this is that in a county that consists of 100% liberals there will be a 36% percent increase in support for immigrants receiving documentation relative to a county that has no liberals (which would only have a 43% support rate).</p>
+<p>The Standard Error was negligible and the p-value for the liberal coefficient was 0. In my regression model, the correlation between liberal political leanings and support for legal status of immigrants is statistically significant at the test level of α=0.05. This can be seen as the p-value of the coefficient that represents liberals is 0. The p value of 0 indicates that the regression’s correlation coefficient has a near zero percent probability of being insignificant, and a near 100% probability that the correlation is not due to random chance. This is because it is hypothesized in my research that the correlation between being liberal and undocumented immigrant support is nonzero.</p>
+<div class="layout-chunk" data-layout="l-body">
+<p><img src="index_files/figure-html5/unnamed-chunk-4-1.png" width="624" style="display: block; margin: auto;" /></p>
 </div>
-<p><img src="index_files/figure-html5/unnamed-chunk-1-4.png" width="624" /></p>
+<div class="layout-chunk" data-layout="l-body">
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="empty-cells: hide;border-bottom:hidden;" colspan="1">
+</th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="1">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+Coef. estimate
 </div>
+</th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="1">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+Std. error
+</div>
+</th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="1">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+P-value
+</div>
+</th>
+</tr>
+<tr>
+<th style="text-align:left;">
+Coefficient
+</th>
+<th style="text-align:right;">
+Bivariate
+</th>
+<th style="text-align:right;">
+Bivariate
+</th>
+<th style="text-align:right;">
+Bivariate
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+0.43
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Liberal
+</td>
+<td style="text-align:right;">
+0.36
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="conclusion">Conclusion</h2>
+<p>In conclusion, we find that counties who have higher proportions of Liberals in them tend to have higher rates of support for the legal status of undocumented immigrants although we are not making a causal claim there seems to be merely a correlation. This finding supports my hypothesis, as I expected liberal-leaning people to exhibit more favorable views towards immigrants. However, there are limitations to this investigation, as confounding variables such as level of education, rate of interactions with immigrant people, and personal connection to immigration could affect this data. Looking forward to further research, I would want to improve my analysis by investigating the impact that the rate of immigrant population in an area affects these views. This would add an additional layer of understanding my question as it would account for political leanings, but also see if an increased exposure to immigrants in your own community could positively or negatively affect general viewpoints. Overall, this investigation was interesting, as it provides some nuance as to how different political sides view immigration and the legal support of undocumented immigrants.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->

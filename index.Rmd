@@ -7,38 +7,131 @@ output:
     self_contained: false
 ---
 
-
-
-## Project thoughts
-
-I want to do a project exploring immigration in the US and certain trends that have been witnessed over the past few years. I will be using a data set that include Refugee Arrivals, Immigrants obtaining lawful permanent status and also deportation statistics.  
-
-### Milestone 4 Analysis 
-Below I included a few additional plots, each of which include an additional level of analysis I want to explore in my project. One specific trend I wanted to look into was how politics might impact the trends that are indicated below, but I am still finding a data set that I might be able to merge to the one below. In the mean time some of the trends I have noticed are that it seems like, over the past decades, years where there has been a Republican Presidency in the US have resulted in less a decreasing rate of refugees into the US along with and increasing number of US immigrants obtaining lawful permanent status, whereas it has been the opposite or remained constant in years where there have been democratic presidents. Other than that I have noticed that in all of the immigration metrics measured that in 2020 there was a significant drop in immigration which is to be expected due to the pandemic. 
-
-```{r}
+```{r echo = FALSE}
 library(tidyverse)
-
-
-us_immg <- read_csv("US_Immg.csv")
-
-refugee_arr <- us_immg |>
-  ggplot(aes(x = Year, y = `Refugee Arrivals`))+
-  geom_line()
-refugee_arr
-
-noncit_apprehend <- us_immg |>
-  ggplot(aes(x = Year, y = `Noncitizen Apprehensions`)) +
-  geom_line()
-noncit_apprehend
-
-lawful_stat <- us_immg |>
-  ggplot(aes(x = Year, y = `Immigrants Obtaining Lawful Permanent Resident Status`)) +
-  geom_line()
-lawful_stat
-
-us_immg |>
-  ggplot(aes(x = Year, y = `Noncitizen Removals`)) +
-  geom_line()
+library(sjlabelled)
+library(haven)
+library(ggridges)
+library(kableExtra)
+library(broom)
+options(
+  knitr.kable.NA = '',
+  width = 100)
+knitr::opts_chunk$set(
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE,
+  fig.align = "center")
 ```
 
+```{r echo = FALSE}
+ces <- left_join(
+read_dta("cumulative_2006-2022.dta"),
+read_dta("cumulative_ces_policy_preferences.dta")
+) |>
+sjlabelled::as_label()
+```
+
+
+
+
+# Introduction and Research Question
+
+The question I am researching is:
+What is the influence of an individuals' political views on their support or opposition of undocumented immigrants receiving legal status in the United States? 
+
+This research will investigate the correlation between the political views that an individual holds and their support of undocumented immigrants receiving legal status. I will be examining data from counties across the entire United States to understand the full length to which political leanings may affect views on immigrant policy. My hypothesis is that individuals who lean more liberal will have more favorable views on supporting the legal status of undocumented immigrants. This is mostly based on the fact that liberals tend to have more favorable views of immigrants generally in the United States. 
+
+This question is important to investigate because debates about immigrant policy and treatment of undocumented immigrants are often some of the most contentious in US politics. They provide important positions that candidates take during US political elections and overall policy making. Specifically, the way in which undocumented immigrants are supported or not supported has brought some of the most important discussion during elections in past years. Thus, I found it important to analyze the impact that one's political views have on their support of undocumented immigrants to understand potential influences people may have in future immigrant policy making. 
+
+
+#Data and Methods
+
+##Data Sources
+Cumulative CES Policy Preferences: This data set compiles responses to questions related to immigration policies along with other policies in the US, focusing on the question of whether undocumented immigrants should be granted legal status.
+
+Cumulative CCES Common Content: In addition to immigration policy preferences, this dataset includes variables related to race demographics, ideological viewpoints, gender, employment status, and other factors.
+
+I will be combining these 2 datasets for my analysis. 
+
+##Research Design
+The study adopts an observational approach with correlational analysis, avoiding assumptions about causal relationships. The research design aims to identify associations between various variables and preferences regarding the legal status of undocumented immigrants.
+
+## Outcome Variables
+
+Legal Status for Undocumented Immigrants - 
+
+The survey question asks respondents, "What do you think the U.S. government should do about immigration? Select all that apply. *Grant legal status to all illegal immigrants who have held jobs and paid taxes for at least 3 years, and not been convicted of any felony crimes*. 
+" The variable "immig_legalize" is introduced to analyze the proportion of respondents supportive of granting legal status to undocumented immigrants.
+
+```{r echo = FALSE}
+outcome_ces <- ces |>
+  select("year", "case_id", "weight", "weight_cumulative", "state", "county_fips", "immig_legalize") |>
+  drop_na()
+
+outcome_ces |>
+  ggplot()+
+  geom_bar(
+    aes(
+      x = immig_legalize,
+      y = ..count../sum(..count..)
+    ), width = .25, fill = "dodgerblue4") 
+```
+
+
+# Results
+
+Taking a look at the plot we created, we can see that there is a positive correlation between the proportion of liberal people in a county and the levels of support in the legal status of immigrants. We see that as the proportion of liberals in a county increases, the levels of support also increase. This supports my hypothesis as I expected liberal people to exhibit higher levels of support towards undocumented immigrants. Looking at the graph, it is interesting to note that there appears to be a larger set of data points of counties with lower levels of liberals. This indicates that this data set appears to have more counties that lean Republican. 
+
+Looking at the regression, I chose to conduct a bivariate regression. This means that my regression looked at two variables, those being political ideology of individuals, and if they support or do not support undocumented immigrants receiving legal status. The bivariate model indicates that for an increase of 1 unit of Liberal there would be a 0.36	increase in support for immigrants receiving documentation. The interpretation of this is that in a county that consists of 100% liberals there will be a 36% percent increase in support for immigrants receiving documentation relative to a county that has no liberals (which would only have a 43% support rate).
+
+The Standard Error was negligible and the p-value for the liberal coefficient was 0. In my regression model, the correlation between liberal political leanings and support for legal status of immigrants is statistically significant at the test level of α=0.05. This can be seen as the p-value of the coefficient that represents liberals is 0. The p value of 0 indicates that the regression's correlation coefficient has a near zero percent probability of being insignificant, and a near 100% probability that the correlation is not due to random chance. This is because it is hypothesized in my research that the correlation between being liberal and undocumented immigrant support is nonzero. 
+
+
+```{r echo = FALSE}
+ces <- ces |>
+  mutate(Legal = if_else(immig_legalize == "Support", 1, 0), Liberal = ifelse(ideo5 == "Very Liberal" | ideo5 == "Liberal", 1, 0)) 
+
+ces|>
+  group_by(county_fips) |>
+  summarize(
+    average = mean(Legal, na.rm = TRUE),
+    prop_Liberal = mean(Liberal, na.rm = TRUE)) |>
+  ggplot(aes(x = prop_Liberal, y = average)) +
+  geom_point(shape = 1) +
+  geom_smooth(method = "lm")+
+  xlim(0,1) + ylim(0,1)+
+  labs(title = "Support for Legal Status by Proportion of Liberals",
+       x = "Proportion of Liberals in County",
+       y = "Proportion Supporting Legal Status in County",
+       caption = "Source: Cumulative CES Policy Preferences;\nCumulative CCES Common Content")
+```
+
+
+```{r echo = FALSE}
+mod1 <- lm(data = ces,
+   Legal ~ Liberal)
+
+results <- mod1 |> 
+      broom::tidy() |> 
+      select(term, est1 = estimate, se1 = std.error, pval1 = p.value)
+
+results |>
+  knitr::kable(
+    booktabs = TRUE, digits = 2,
+    col.names = c("Coefficient", rep(c("Bivariate"), 3))) |>
+  kable_styling(
+    position = "center", 
+    latex_options = "HOLD_position") |>
+  add_header_above(
+    header = c(
+      " " = 1, 
+      "Coef. estimate" = 1, 
+      "Std. error" = 1, 
+      "P-value" = 1))
+```
+
+
+## Conclusion
+
+In conclusion, we find that counties who have higher proportions of Liberals in them tend to have higher rates of support for the legal status of undocumented immigrants although we are not making a causal claim there seems to be merely a correlation. This finding supports my hypothesis, as I expected liberal-leaning people to exhibit more favorable views towards immigrants. However, there are limitations to this investigation, as confounding variables such as level of education, rate of interactions with immigrant people, and personal connection to immigration could affect this data. Looking forward to further research, I would want to improve my analysis by investigating the impact that the rate of immigrant population in an area affects these views. This would add an additional layer of understanding my question as it would account for political leanings, but also see if an increased exposure to immigrants in your own community could positively or negatively affect general viewpoints. Overall, this investigation was interesting, as it provides some nuance as to how different political sides view immigration and the legal support of undocumented immigrants. 
