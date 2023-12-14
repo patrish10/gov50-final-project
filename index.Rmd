@@ -75,7 +75,11 @@ outcome_ces |>
     aes(
       x = immig_legalize,
       y = ..count../sum(..count..)
-    ), width = .25, fill = "dodgerblue4") 
+    ), width = .25, fill = "dodgerblue4") +
+  labs(
+    x = "Support of Legalization of Immigrants",
+    y = "Proportion of Counties in Dataset"
+  )
 ```
 
 
